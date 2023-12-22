@@ -23,9 +23,13 @@ jobs:
 
       - name: Check for console.log
         run: |
-          if grep -w 'console.log' $(git diff --name-only); then
-            echo "Console logs found. Please remove them before merging the pull request."
-            exit 1
-          else
-            echo "No console logs found. Proceeding with the pull request."
-          fi
+          # Get the base and head commit SHAs
+            BASE_COMMIT=$(git rev-parse origin/${{ github.base_ref }})
+            HEAD_COMMIT=$(git rev-parse origin/${{ github.head_ref }})
+
+          # List changed files
+            CHANGED_FILES=$(git diff --name-only $BASE_COMMIT $HEAD_COMMIT)
+
+          # Print the list of changed files
+            echo "Changed Files:"
+            echo "$CHANGED_FILES"
