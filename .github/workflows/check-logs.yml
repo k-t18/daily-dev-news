@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.before }}..${{ github.sha }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -23,8 +25,9 @@ jobs:
 
       - name: Check for console.log
         run: |
-          # Get the list of files modified in the pull request
-            committed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-
-          # Print the list of committed files
-            echo "Committed Files: $committed_files"
+          if grep -w 'console\.log' $(git diff --name-only); then
+            echo "Console logs found. Please remove them before merging the pull request."
+            exit 1
+          else
+            echo "No console logs found. Proceeding with the pull request."
+          fi
