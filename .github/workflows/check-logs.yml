@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.before }}..${{ github.sha }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -25,7 +23,7 @@ jobs:
 
       - name: Check for console.log
         run: |
-          if grep -w 'console\.log' $(git diff --name-only); then
+          if grep -w 'console.log' $(git diff --name-only); then
             echo "Console logs found. Please remove them before merging the pull request."
             exit 1
           else
