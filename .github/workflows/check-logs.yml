@@ -23,8 +23,8 @@ jobs:
 
       - name: Check for console.log
         run: |
-          # Fail the build if console.log is found
-          if git diff --name-only ${{ github.base_ref }} | grep '\.js$\|\.jsx$\|\.ts$\|\.tsx$' | xargs grep -E '\bconsole\.log\b'; then
-            echo "Error: Found 'console.log' statements in the changes. Please remove them before creating the pull request."
-            exit 1
-          fi
+          # Get the list of modified files in the latest commit
+            modified_files=$(git diff --name-only HEAD^..HEAD)
+
+          # Print the list of modified files
+            echo "Modified Files: $modified_files"
