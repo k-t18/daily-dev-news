@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -23,13 +25,5 @@ jobs:
 
       - name: Check for console.log
         run: |
-          # Get the base and head commit SHAs
-            BASE_COMMIT=$(git rev-parse origin/${{ github.base_ref }})
-            HEAD_COMMIT=$(git rev-parse ${{ github.head_sha }})
-
-          # List changed files
-            CHANGED_FILES=$(git diff --name-only $BASE_COMMIT $HEAD_COMMIT)
-
-          # Print the list of changed files
-            echo "Changed Files:"
-            echo "$CHANGED_FILES"
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          git diff --name-only origin/${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.head.sha }}
