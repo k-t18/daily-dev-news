@@ -1,0 +1,25 @@
+name: Check Console logs
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  check-logs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Check for console logs
+        run: |
+          if grep -w 'console.log' ./**/*.ts ./**/*.tsx; then
+            echo "Console logs found. Please remove them before committing."
+            exit 1
+          else
+            echo "No console logs found. Proceeding with the commit."
+          fi
