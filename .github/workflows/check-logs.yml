@@ -23,8 +23,8 @@ jobs:
 
       - name: Check for console.log
         run: |
-          # Get the list of modified files in the latest commit
-            modified_files=$(git diff --name-only HEAD^..HEAD)
+          # Get the list of files modified in the pull request
+            committed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
 
-          # Print the list of modified files
-            echo "Modified Files: $modified_files"
+          # Print the list of committed files
+            echo "Committed Files: $committed_files"
