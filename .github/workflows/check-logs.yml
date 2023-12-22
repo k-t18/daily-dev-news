@@ -1,25 +1,32 @@
-name: Check Console logs
+name: Check for console.log
+
 on:
-  push:
+  pull_request:
     branches:
       - master
+    paths:
+      - "**/*.{js,jsx,ts,tsx}" # Updated file pattern to include .js, .jsx, .ts, .tsx
 
 jobs:
-  check-logs:
+  check:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          ref: master
-          fetch-depth: 0
 
-      - name: Check for console logs
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18" # Updated to Node.js version 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check for console.log
         run: |
-          if grep -w 'console.log' ./**/*.ts ./**/*.tsx; then
-            echo "Console logs found. Please remove them before committing."
+          # Fail the build if console.log is found
+          if git diff --name-only ${{ github.base_ref }} | grep '\.js$\|\.jsx$\|\.ts$\|\.tsx$' | xargs grep -E '\bconsole\.log\b'; then
+            echo "Error: Found 'console.log' statements in the changes. Please remove them before creating the pull request."
             exit 1
-          else
-            echo "No console logs found. Proceeding with the commit."
           fi
