@@ -44,3 +44,4 @@ jobs:
             echo "Error: Console.log found. Failing the run."
             exit 1
           fi
+          echo "$check_logs"
