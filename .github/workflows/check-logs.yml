@@ -27,7 +27,4 @@ jobs:
         run: |
           IFS=$'\n' read -r -a file_names <<< "$(git diff --name-only -- origin/${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.head.sha }})"
           
-          # Print all file names
-          for file in "${file_names[@]}"; do
-            echo "Changed file: $file"
-          done
+          echo "Changed files: ${file_names[@]}"
