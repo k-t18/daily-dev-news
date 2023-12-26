@@ -40,7 +40,7 @@ jobs:
           done
 
           # If console.log is found, fail the run
-          if [ "$check_logs" = true ]; then
+          if [[ "$check_logs" = true ]]; then
             echo "Error: Console.log found. Failing the run."
             exit 1
           fi
