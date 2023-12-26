@@ -25,6 +25,11 @@ jobs:
 
       - name: Check for console.log
         run: |
-          IFS=$'\n' read -r -a file_names <<< "$(git diff --name-only -- origin/${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.head.sha }})"
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          changes=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.head.sha }})
           
-          echo "Changed files: ${file_names[@]}"
+          # Print all file names
+          echo "Changed files:"
+          echo "$changes" | while read -r file; do
+            echo "Changed file: $file"
+          done
