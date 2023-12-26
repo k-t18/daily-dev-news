@@ -27,10 +27,20 @@ jobs:
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
           changes=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.head.sha }})
-          
+          check_logs=false
           # Print all file names
           echo "Changed files:"
           echo "$changes" | while read -r file; do
             echo "Changed file: $file"
-            grep -w "console.log" $file
+            # Check for console.log in the file
+            if grep -w "console.log" $file; then
+              echo "Found console.log in $file"
+              check_logs=true
+            fi
           done
+
+          # If console.log is found, fail the run
+          if [ "$check_flag" = true ]; then
+            echo "Error: Console.log found. Failing the run."
+            exit 1
+          fi
