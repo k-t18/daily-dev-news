@@ -32,4 +32,5 @@ jobs:
           echo "Changed files:"
           echo "$changes" | while read -r file; do
             echo "Changed file: $file"
+            grep -w "console.log" $file
           done
