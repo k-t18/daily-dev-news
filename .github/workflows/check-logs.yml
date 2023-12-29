@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18" # Updated to Node.js version 18
+          node-version: '18' # Updated to Node.js version 18
 
       - name: Install dependencies
         run: npm install
@@ -44,5 +44,5 @@ jobs:
           done
 
           # If console.log is found, fail the run
-         
+
           echo "$check_logs"
