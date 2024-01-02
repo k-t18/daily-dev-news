@@ -1,3 +1,4 @@
+import SideBar from '@/components/SideBar';
 import { API_CONFIG } from '@/services/config/api-config';
 import { FC } from 'react';
 
@@ -26,17 +27,32 @@ const GETListOfQuestions: any = async () => {
   // Example usage
   const uniqueNumber = generateUniqueNumberForPageNumber();
 
-  const api_data = fetch(
+  const api_data = await fetch(
     `${API_CONFIG.base_url}/questions?order=${order}&sort=${sort}&tagged=${tagged}&site=${site}&page=${uniqueNumber}&pagesize=${pageSize}&key=${apiKey}`
-  )
-    .then((response) => console.log(response))
-    // .then((data) => console.log(data))
-    .catch((err) => console.error(err));
+  );
+  if (!api_data.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error('Failed to fetch data');
+  }
+
+  return api_data.json();
 };
 
 const Page: FC = async () => {
   const data = await GETListOfQuestions();
   console.log('data', data);
-  return <div>test</div>;
+  return (
+    <div>
+      {/* {data?.items?.length > 0 &&
+        data?.items?.map((obj: any, index: number) => {
+          return (
+            <div key={index}>
+              <h3 className="text-lg">{obj?.title} </h3>
+            </div>
+          );
+        })} */}
+      <SideBar />
+    </div>
+  );
 };
 export default Page;
